@@ -9,18 +9,22 @@ import queue
 import logging
 import random
 import argparse
-
+import matplotlib.pyplot as plt
+import numpy as np
 REF_STRING = None
 
 def FIFO(num_frames: int):
     record = []
     fifo_q = queue.Queue(num_frames)
-
+    pg_flt_cnt = 0
 
     for x in REF_STRING:
-
+        print('\t' + str(x) + ' on deck')
         if x not in record:
-            print('page fault\t\t\t', end=" ")
+            # print('page fault\t\t\t', end=" ")
+            print('page fault\t\t\t', end=' ')
+            pg_flt_cnt += 1
+            # show_rec(record)
             fifo_q.put(x)
             record.append(x)
 
@@ -28,23 +32,32 @@ def FIFO(num_frames: int):
 
             if fifo_q.full():
                 old = fifo_q.get()
-                print('[removing ' + str(old) + ']')
+                print('\t[removing ' + str(old) + ']')
                 record.remove(old)
 
         else:
-            print('not page fault\t\t\t', end=" ")
+            print('not page fault\t\t\t', end=' ')
+            # print('not page fault\t\t\t', end=" ")
             show_rec(record)
 
-
-
-
+    print('\nTotal Faults: ' + str(pg_flt_cnt))
     return 0
 
+
+# helper function for debugging
 def show_rec(record: []):
-    if (len(record) == 0):
-        print('- - - - ', end=" ")
+    n = 1
+    if len(record) == 0:
+        print('- - - - ')
     for x in record:
-        print(x, end=" ")
+        # print('[' + str(n) + ']', end=' ')
+        if n != len(record):
+            print(x, end=" ")
+        else:
+            print(x)
+        n += 1
+
+
 
 def LRU(num_frames: int):
     # something
@@ -81,7 +94,7 @@ def main():
     global REF_STRING
     REF_STRING = make_ref_string(1, 5)
 
-    FIFO(4)
+    FIFO(args.frames)
     return 0
 
 

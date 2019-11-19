@@ -17,12 +17,9 @@ Authors: Kevin Funderburg, Rob Murray
 This project's goal is to gain a better understanding of the algorithms used by operating systems to handle virtual memory page replacement. The goal of this project is to compare and assess the impact of these algorithms on the number of page faults incurred across a varying number of physical-memory page frames available.
 
 ## Usage
-The program was built on macOS and Linux using POSIX threading with C++.
-
-- Make commands
+Execute with the following command:
 ```shell
-make
-make cleanall
+python3 main.py -f 4
 ```
 
 

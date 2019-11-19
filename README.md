@@ -1,4 +1,4 @@
-# Pair War
+# Virtual Memory Replacement Algorithms
 
 Authors: Kevin Funderburg, Rob Murray
 

@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 REF_STRING = None
 
+
 def FIFO(num_frames: int):
     record = []
     fifo_q = queue.Queue(num_frames)
@@ -21,10 +22,8 @@ def FIFO(num_frames: int):
     for x in REF_STRING:
         print('\t' + str(x) + ' on deck')
         if x not in record:
-            # print('page fault\t\t\t', end=" ")
             print('page fault\t\t\t', end=' ')
             pg_flt_cnt += 1
-            # show_rec(record)
             fifo_q.put(x)
             record.append(x)
 
@@ -37,7 +36,6 @@ def FIFO(num_frames: int):
 
         else:
             print('not page fault\t\t\t', end=' ')
-            # print('not page fault\t\t\t', end=" ")
             show_rec(record)
 
     print('\nTotal Faults: ' + str(pg_flt_cnt))
@@ -50,7 +48,6 @@ def show_rec(record: []):
     if len(record) == 0:
         print('- - - - ')
     for x in record:
-        # print('[' + str(n) + ']', end=' ')
         if n != len(record):
             print(x, end=" ")
         else:
@@ -58,14 +55,13 @@ def show_rec(record: []):
         n += 1
 
 
-
 def LRU(num_frames: int):
-    # something
+    # TODO
     return 0
 
 
 def OPT(num_frames: int):
-    # something
+    # TODO
     return 0
 
 
@@ -99,5 +95,4 @@ def main():
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
     main()

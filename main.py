@@ -21,7 +21,7 @@ def FIFO(num_frames: int):
 
     for x in REF_STRING:
         print('\t' + str(x) + ' on deck')
-            if x not in record: # page fault
+        if x not in record: # page fault
             print('page fault\t\t\t', end=' ')
             pg_flt_cnt += 1
             fifo_q.put(x)
@@ -32,6 +32,7 @@ def FIFO(num_frames: int):
                 old = fifo_q.get()
                 print('\t[removing ' + str(old) + ']')
                 record.remove(old)
+
         else:   # not page fault
             print('not page fault\t\t\t', end=' ')
             show_rec(record)
@@ -60,8 +61,10 @@ def make_ref_string():
     return ref
 
 
-# helper function for debugging
 def show_rec(record: []):
+    """
+    helper function for debugging
+    """
     n = 1
     if len(record) == 0:
         print('- - - - ')

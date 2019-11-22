@@ -26,14 +26,12 @@ def FIFO(num_frames: int):
             pg_flt_cnt += 1
             fifo_q.put(x)
             record.append(x)
-
             show_rec(record)
 
             if fifo_q.full():
                 old = fifo_q.get()
                 print('\t[removing ' + str(old) + ']')
                 record.remove(old)
-
         else:
             print('not page fault\t\t\t', end=' ')
             show_rec(record)

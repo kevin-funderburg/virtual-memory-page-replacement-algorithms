@@ -11,16 +11,22 @@ import random
 import argparse
 import matplotlib.pyplot as plt
 import numpy as np
+
+
 REF_STRING = None
 
 
 def FIFO(num_frames: int):
+    """
+    First In First Out page replacement
+    """
     record = []
     fifo_q = queue.Queue(num_frames)
     pg_flt_cnt = 0
 
     for x in REF_STRING:
         print('\t' + str(x) + ' on deck')
+
         if x not in record: # page fault
             print('page fault\t\t\t', end=' ')
             pg_flt_cnt += 1
@@ -42,11 +48,17 @@ def FIFO(num_frames: int):
 
 
 def LRU(num_frames: int):
+    """
+    Least Recently Used page replacement
+    """
     # TODO
     return 0
 
 
 def OPT(num_frames: int):
+    """
+    Optimal page replacement
+    """
     # TODO
     return 0
 

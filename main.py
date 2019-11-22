@@ -21,7 +21,7 @@ def FIFO(num_frames: int):
 
     for x in REF_STRING:
         print('\t' + str(x) + ' on deck')
-        if x not in record:
+            if x not in record: # page fault
             print('page fault\t\t\t', end=' ')
             pg_flt_cnt += 1
             fifo_q.put(x)
@@ -32,12 +32,32 @@ def FIFO(num_frames: int):
                 old = fifo_q.get()
                 print('\t[removing ' + str(old) + ']')
                 record.remove(old)
-        else:
+        else:   # not page fault
             print('not page fault\t\t\t', end=' ')
             show_rec(record)
 
     print('\nTotal Faults: ' + str(pg_flt_cnt))
     return 0
+
+
+def LRU(num_frames: int):
+    # TODO
+    return 0
+
+
+def OPT(num_frames: int):
+    # TODO
+    return 0
+
+
+def make_ref_string():
+    """
+    make a reference string of 100 random numbers between 0-49
+    """
+    ref = []
+    for n in range(0, 100):
+        ref.append(random.randint(0, 49))
+    return ref
 
 
 # helper function for debugging
@@ -51,23 +71,6 @@ def show_rec(record: []):
         else:
             print(x)
         n += 1
-
-
-def LRU(num_frames: int):
-    # TODO
-    return 0
-
-
-def OPT(num_frames: int):
-    # TODO
-    return 0
-
-
-def make_ref_string(length: int, max: int):
-    ref = []
-    for n in range(0, 100):
-        ref.append(random.randint(0, 49))
-    return ref
 
 
 def main():
@@ -86,7 +89,7 @@ def main():
 
     # create reference string
     global REF_STRING
-    REF_STRING = make_ref_string(1, 5)
+    REF_STRING = make_ref_string()
 
     FIFO(args.frames)
     return 0

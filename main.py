@@ -59,7 +59,11 @@ def OPT(num_frames: int):
     """
     Optimal page replacement
     """
-    # TODO
+    record = []
+    pg_flt_cnt = 0
+
+    for x in REF_STRING:
+        
     return 0
 
 
@@ -106,7 +110,8 @@ def main():
     global REF_STRING
     REF_STRING = make_ref_string()
 
-    FIFO(args.frames)
+    # FIFO(args.frames)
+    OPT(args.frames)
     return 0
 
 

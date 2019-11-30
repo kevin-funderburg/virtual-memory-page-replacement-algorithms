@@ -24,10 +24,11 @@ def FIFO(num_frames: int):
 
     for i in REF_STRING:
         x = int(i)
-        print('\t' + str(x) + ' on deck')
+        #print('\t' + str(x) + ' on deck')
+        print(str(x) + ' on deck')
 
         if x not in record: #page fault
-            print('page fault\t\t\t', end=' ')
+            print('page fault\t\t\t')#, end=' ')
             page_fault_count += 1
             fifo_q.put(x)
             record.append(x)
@@ -39,7 +40,7 @@ def FIFO(num_frames: int):
                 record.remove(old)
 
         else:   # not page fault
-            print('not page fault\t\t\t', end=' ')
+            print('value in memory(no fault)\t\t\t', end=' ')
             show_rec(record)
 
     print('\nTotal Faults: ' + str(page_fault_count))
@@ -50,7 +51,16 @@ def LRU(num_frames: int):
     """
     Least Recently Used page replacement
     """
-    # TODO
+    frame_age = []
+    record = []
+
+    fifo_q = queue.Queue(num_frames)
+    page_fault_count = 0
+
+    #for i in REF_STRING:
+
+
+
     return 0
 
 
@@ -91,11 +101,13 @@ def main():
     parser.add_argument('--frames',
                         type=int,
                         dest='frames',
-                        default=3,
+                        default=50,
                         required=False,
                         help='number of physical-memory page frames available')
-    parser.add_argument('-a',
+    parser.add_argument('-alg',
                         type=int,
+                        dest='algorithm',
+                        default=1,
                         required=False,
                         help='Algorithm to test: [1,2,3] - FIFO, LRU, OPT')
     args = parser.parse_args()
@@ -104,10 +116,14 @@ def main():
     global REF_STRING
     REF_STRING = make_ref_string()
 
-    frames = 3
-    FIFO(args.frames)
-    return 0
+    if (args.algorithm == 1):
+        FIFO(args.frames)
+    elif (args.algorithm == 2):
+        LRU(args.frames)
+    elif (args.algorithm == 3):
+        OPT(args.frames)
 
+    return 0
 
 if __name__ == "__main__":
     main()

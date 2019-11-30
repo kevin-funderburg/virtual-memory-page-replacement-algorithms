@@ -31,10 +31,11 @@ def FIFO(num_frames: int):
         show_queue(fifo_q)
 
         if x not in memory:  #page fault
-            print('\npage fault\n', end='')
+            print('\npage fault ->', end=' ')
             page_fault_count += 1
 
             if not fifo_q.full(): #memory not full append value
+                print('filling memory')
                 fifo_q.put(x)
                 memory.append(x)
                 show_rec(memory)
@@ -42,7 +43,11 @@ def FIFO(num_frames: int):
             elif fifo_q.full():  #memory is full, use algorithm
                 old = fifo_q.get()
                 print('[removing ' + str(old) + ']')
-                memory.remove(old)
+                for i, item in enumerate(memory):
+                    if item == old:
+                        memory[i] = x
+                        fifo_q.put(x)
+
                 show_rec(memory)
 
         else:  #no page fault
@@ -50,6 +55,8 @@ def FIFO(num_frames: int):
             show_rec(memory)
 
     return 0
+
+
 
 
 def LRU(num_frames: int):

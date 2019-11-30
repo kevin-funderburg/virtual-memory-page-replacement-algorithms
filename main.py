@@ -6,15 +6,13 @@
 
 from collections import deque
 import queue
-import logging
+#import logging
 import random
 import argparse
-import matplotlib.pyplot as plt
-import numpy as np
-
+#import matplotlib.pyplot as plt
+#import numpy as np
 
 REF_STRING = None
-
 
 def FIFO(num_frames: int):
     """
@@ -22,14 +20,15 @@ def FIFO(num_frames: int):
     """
     record = []
     fifo_q = queue.Queue(num_frames)
-    pg_flt_cnt = 0
+    page_fault_count = 0
 
-    for x in REF_STRING:
+    for i in REF_STRING:
+        x = int(i)
         print('\t' + str(x) + ' on deck')
 
-        if x not in record: # page fault
+        if x not in record: #page fault
             print('page fault\t\t\t', end=' ')
-            pg_flt_cnt += 1
+            page_fault_count += 1
             fifo_q.put(x)
             record.append(x)
             show_rec(record)
@@ -43,7 +42,7 @@ def FIFO(num_frames: int):
             print('not page fault\t\t\t', end=' ')
             show_rec(record)
 
-    print('\nTotal Faults: ' + str(pg_flt_cnt))
+    print('\nTotal Faults: ' + str(page_fault_count))
     return 0
 
 
@@ -72,7 +71,6 @@ def make_ref_string():
         ref.append(random.randint(0, 49))
     return ref
 
-
 def show_rec(record: []):
     """
     helper function for debugging
@@ -87,14 +85,14 @@ def show_rec(record: []):
             print(x)
         n += 1
 
-
 def main():
     # build argument parser
     parser = argparse.ArgumentParser()
     parser.add_argument('--frames',
                         type=int,
                         dest='frames',
-                        required=True,
+                        default=3,
+                        required=False,
                         help='number of physical-memory page frames available')
     parser.add_argument('-a',
                         type=int,
@@ -106,6 +104,7 @@ def main():
     global REF_STRING
     REF_STRING = make_ref_string()
 
+    frames = 3
     FIFO(args.frames)
     return 0
 

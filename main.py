@@ -25,7 +25,7 @@ def FIFO(num_frames: int):
     for i in REF_STRING:
         x = int(i)
         #print('\t' + str(x) + ' on deck')
-        print(str(x) + ' on deck')
+        print('\n' + str(x) + ' on deck')
 
         if x not in record: #page fault
             print('page fault\t\t\t')#, end=' ')
@@ -40,7 +40,7 @@ def FIFO(num_frames: int):
                 record.remove(old)
 
         else:   # not page fault
-            print('value in memory(no fault)\t\t\t', end=' ')
+            print('value found in memory(no fault)\t\t\t', end=' \n')
             show_rec(record)
 
     print('\nTotal Faults: ' + str(page_fault_count))
@@ -58,9 +58,26 @@ def LRU(num_frames: int):
     fifo_q = queue.Queue(num_frames)
     page_fault_count = 0
 
-    #for i in REF_STRING:
+    for i in REF_STRING:
+        x = int(i)
+        # print('\t' + str(x) + ' on deck')
+        print('\n' + str(x) + ' on deck')
 
+        if x not in record:  # page fault
+            print('page fault\t\t\t')  # , end=' ')
+            page_fault_count += 1
+            fifo_q.put(x)
+            record.append(x)
+            show_rec(record)
 
+            if fifo_q.full():
+                old = fifo_q.get()
+                print('\t[removing ' + str(old) + ']')
+                record.remove(old)
+
+        else:  # not page fault
+            print('value found in memory(no fault)\t\t\t', end=' \n')
+            show_rec(record)
 
     return 0
 
@@ -69,7 +86,32 @@ def OPT(num_frames: int):
     """
     Optimal page replacement
     """
-    # TODO
+    frame_age = []
+    record = []
+
+    fifo_q = queue.Queue(num_frames)
+    page_fault_count = 0
+
+    for i in REF_STRING:
+        x = int(i)
+        # print('\t' + str(x) + ' on deck')
+        print('\n' + str(x) + ' on deck')
+
+        if x not in record:  # page fault
+            print('page fault\t\t\t')  # , end=' ')
+            page_fault_count += 1
+            fifo_q.put(x)
+            record.append(x)
+            show_rec(record)
+
+            if fifo_q.full():
+                old = fifo_q.get()
+                print('\t[removing ' + str(old) + ']')
+                record.remove(old)
+
+        else:  # not page fault
+            print('value found in memory(no fault)\t\t\t', end=' \n')
+            show_rec(record)
     return 0
 
 
@@ -102,7 +144,7 @@ def main():
     parser.add_argument('--frames',
                         type=int,
                         dest='frames',
-                        default=50,
+                        default=10,
                         required=False,
                         help='number of physical-memory page frames available')
     parser.add_argument('-alg',
@@ -123,6 +165,8 @@ def main():
         LRU(args.frames)
     elif (args.algorithm == 3):
         OPT(args.frames)
+    else:
+        print("Invalid algorithm selection")
 
     return 0
 

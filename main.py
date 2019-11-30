@@ -51,6 +51,7 @@ def LRU(num_frames: int):
     """
     Least Recently Used page replacement
     """
+
     frame_age = []
     record = []
 

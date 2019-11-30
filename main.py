@@ -28,9 +28,10 @@ def FIFO(num_frames: int):
 
         print('\n' + str(x) + ' on deck')
         show_rec(memory)
+        show_queue(fifo_q)
 
         if x not in memory:  #page fault
-            print('page fault\n', end='')
+            print('\npage fault\n', end='')
             page_fault_count += 1
 
             if not fifo_q.full(): #memory not full append value
@@ -45,7 +46,7 @@ def FIFO(num_frames: int):
                 show_rec(memory)
 
         else:  #no page fault
-            print('value found in memory(no fault)\t\t\t', end=' \n')
+            print('\nvalue found in memory(no fault)\t\t\t', end=' \n')
             show_rec(memory)
 
     return 0
@@ -128,10 +129,16 @@ def make_ref_string():
         ref.append(random.randint(0, 49))
     return ref
 
+def show_queue(q):
+    print('queue:', end='  ')
+    for item in q.queue:
+        print(item, end=' ')
+
 def show_rec(record: []):
     """
     helper function for debugging
     """
+    print('memory:', end=' ')
     n = 1
     if len(record) == 0:
         print('- - - - ')

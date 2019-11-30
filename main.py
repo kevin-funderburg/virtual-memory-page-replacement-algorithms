@@ -18,32 +18,36 @@ def FIFO(num_frames: int):
     """
     First In First Out page replacement
     """
-    record = []
+    frame_age = []
+    memory = []
+
     fifo_q = queue.Queue(num_frames)
     page_fault_count = 0
 
-    for i in REF_STRING:
-        x = int(i)
-        #print('\t' + str(x) + ' on deck')
+    for x in REF_STRING:
+
         print('\n' + str(x) + ' on deck')
+        show_rec(memory)
 
-        if x not in record: #page fault
-            print('page fault\t\t\t')#, end=' ')
+        if x not in memory:  #page fault
+            print('page fault\n', end='')
             page_fault_count += 1
-            fifo_q.put(x)
-            record.append(x)
-            show_rec(record)
 
-            if fifo_q.full():
+            if not fifo_q.full(): #memory not full append value
+                fifo_q.put(x)
+                memory.append(x)
+                show_rec(memory)
+
+            elif fifo_q.full():  #memory is full, use algorithm
                 old = fifo_q.get()
-                print('\t[removing ' + str(old) + ']')
-                record.remove(old)
+                print('[removing ' + str(old) + ']')
+                memory.remove(old)
+                show_rec(memory)
 
-        else:   # not page fault
+        else:  #no page fault
             print('value found in memory(no fault)\t\t\t', end=' \n')
-            show_rec(record)
+            show_rec(memory)
 
-    print('\nTotal Faults: ' + str(page_fault_count))
     return 0
 
 
@@ -53,31 +57,32 @@ def LRU(num_frames: int):
     """
 
     frame_age = []
-    record = []
+    memory = []
 
     fifo_q = queue.Queue(num_frames)
     page_fault_count = 0
 
-    for i in REF_STRING:
-        x = int(i)
-        # print('\t' + str(x) + ' on deck')
+    for x in REF_STRING:
+
         print('\n' + str(x) + ' on deck')
 
-        if x not in record:  # page fault
-            print('page fault\t\t\t')  # , end=' ')
+        if x not in memory:  #page fault
+            print('page fault\n', end='')
             page_fault_count += 1
-            fifo_q.put(x)
-            record.append(x)
-            show_rec(record)
 
-            if fifo_q.full():
+            if not fifo_q.full(): #memory not full append value
+                fifo_q.put(x)
+                memory.append(x)
+                show_rec(memory)
+
+            elif fifo_q.full():  #memory is full, use algorithm
                 old = fifo_q.get()
                 print('\t[removing ' + str(old) + ']')
-                record.remove(old)
+                memory.remove(old)
 
-        else:  # not page fault
+        else:  #no page fault
             print('value found in memory(no fault)\t\t\t', end=' \n')
-            show_rec(record)
+            show_rec(memory)
 
     return 0
 
@@ -87,31 +92,30 @@ def OPT(num_frames: int):
     Optimal page replacement
     """
     frame_age = []
-    record = []
+    memory = []
 
     fifo_q = queue.Queue(num_frames)
     page_fault_count = 0
 
-    for i in REF_STRING:
-        x = int(i)
-        # print('\t' + str(x) + ' on deck')
+    for x in REF_STRING:
+
         print('\n' + str(x) + ' on deck')
 
-        if x not in record:  # page fault
-            print('page fault\t\t\t')  # , end=' ')
+        if x not in memory:  # page fault
+            print('page fault\n', end='')
             page_fault_count += 1
             fifo_q.put(x)
-            record.append(x)
-            show_rec(record)
+            memory.append(x)
+            show_rec(memory)
 
             if fifo_q.full():
                 old = fifo_q.get()
                 print('\t[removing ' + str(old) + ']')
-                record.remove(old)
+                memory.remove(old)
 
         else:  # not page fault
             print('value found in memory(no fault)\t\t\t', end=' \n')
-            show_rec(record)
+            show_rec(memory)
     return 0
 
 

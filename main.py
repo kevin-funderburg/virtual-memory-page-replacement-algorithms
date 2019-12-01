@@ -18,9 +18,10 @@ def FIFO(num_frames: int):
     """
     First In First Out page replacement
     """
-    memory = []
 
     print("First in first out")
+    memory = []
+
     fifo_q = queue.Queue(num_frames)
     page_fault_count = 0
 
@@ -62,6 +63,7 @@ def LRU(num_frames: int):
     """
     Least Recently Used page replacement
     """
+
     print('Least recently used page replacement')
     memory = []
     age = []
@@ -112,16 +114,16 @@ def LRU(num_frames: int):
 
     return 0
 
-
 def OPT(num_frames: int):
     """
     Optimal page replacement
     """
 
     print('Optimal page replacement')
-    memory = []
     print("reference string length:", len(REF_STRING))
     print("Reference String:",*REF_STRING)
+
+    memory = []
 
     fifo_q = queue.Queue(num_frames)
     page_fault_count = 0
@@ -134,13 +136,13 @@ def OPT(num_frames: int):
             page_fault_count += 1
             print('page fault ->', end=' ')
 
-            if len(memory) != num_frames:
+            if len(memory) != num_frames: # memory not full append value
                 print('filling memory')
                 memory.append(x)
                 print('Memory:', *memory)
                 print('Page faults:', page_fault_count)
 
-            elif len(memory) == num_frames:
+            elif len(memory) == num_frames: # memory is full use algorithm
                 print('[removing' + ']', end='')
                 #memory.remove(old)
                 print('\nMemory:',*memory)

@@ -10,7 +10,7 @@ import queue
 import random
 import argparse
 #import matplotlib.pyplot as plt
-#import numpy as np
+import numpy as np
 
 REF_STRING = None
 
@@ -53,50 +53,56 @@ def FIFO(num_frames: int):
             print('\nvalue found in memory(no fault)\t\t\t', end=' \n')
             show_rec(memory)
 
+    print('\n\nTotal page faults: ', page_fault_count)
+
     return 0
-
-
-
 
 def LRU(num_frames: int):
     """
     Least Recently Used page replacement
     """
     memory = []
+    age = []
 
-    tracker = -1
+    #tracker = -1
     page_fault_count = 0
 
     for x in REF_STRING:
-        tracker += 1
-        if tracker == (num_frames):
-            tracker = 0
+        #tracker += 1
+        #if tracker == (num_frames):
+         #   tracker = 0
 
         print('\n' + str(x) + ' on deck')
-        show_rec(memory)
-        print('tracker = ', tracker, end=' ')
+        print('Memory: ', *memory)
+        print('Age:    ', *age)
+        #print('tracker = ', tracker, end=' ')
 
         if x not in memory:  #page fault
-            print('\npage fault ->', end=' ')
+            print('page fault ->', end=' ')
             page_fault_count += 1
 
             if len(memory) != num_frames: #memory not full append value
                 print('filling memory')
                 memory.append(x)
-                show_rec(memory)
+                age.append(0)
+                age = [item + 1 for item in age]
+                print('Memory: ', *memory)
 
             elif len(memory) == num_frames:  #memory is full, use algorithm
-                print('[removing ' + str(memory[tracker]) + ']')
-                memory[tracker] = x
-                #for i, item in enumerate(memory):
-                 #   if item == memory[tracker]:
-                  #      memory[tracker] = x
-
-                show_rec(memory)
+                index = age.index(max(age))
+                print('[removing ' + str(memory[index]) + ']')
+                memory[index] = x
+                age = [item + 1 for item in age]
+                age[index] = 0
+                print('Memory: ',*memory)
 
         else:  #no page fault
+
             print('\nvalue found in memory(no fault)\t\t\t', end=' \n')
-            show_rec(memory)
+            age = [item + 1 for item in age]
+            print('Memory: ', *memory)
+
+    print('\n\nTotal page faults: ', page_fault_count)
 
     return 0
 
@@ -146,6 +152,21 @@ def show_queue(q):
     print('queue:', end='  ')
     for item in q.queue:
         print(item, end=' ')
+
+def show_age(record: []):
+    """
+    helper function for debugging
+    """
+    print('age:   ', end=' ')
+    n = 1
+    if len(record) == 0:
+        print('- - - - ')
+    for x in record:
+        if n != len(record):
+            print(x,'',end=" ")
+        else:
+            print(x)
+        n += 1
 
 def show_rec(record: []):
     """

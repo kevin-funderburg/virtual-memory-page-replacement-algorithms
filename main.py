@@ -18,7 +18,6 @@ def FIFO(num_frames: int):
     """
     First In First Out page replacement
     """
-    frame_age = []
     memory = []
 
     fifo_q = queue.Queue(num_frames)
@@ -63,33 +62,40 @@ def LRU(num_frames: int):
     """
     Least Recently Used page replacement
     """
-
-    frame_age = []
     memory = []
 
-    fifo_q = queue.Queue(num_frames)
+    tracker = -1
     page_fault_count = 0
 
     for x in REF_STRING:
+        tracker += 1
+        if tracker == (num_frames):
+            tracker = 0
 
         print('\n' + str(x) + ' on deck')
+        show_rec(memory)
+        print('tracker = ', tracker, end=' ')
 
         if x not in memory:  #page fault
-            print('page fault\n', end='')
+            print('\npage fault ->', end=' ')
             page_fault_count += 1
 
-            if not fifo_q.full(): #memory not full append value
-                fifo_q.put(x)
+            if len(memory) != num_frames: #memory not full append value
+                print('filling memory')
                 memory.append(x)
                 show_rec(memory)
 
-            elif fifo_q.full():  #memory is full, use algorithm
-                old = fifo_q.get()
-                print('\t[removing ' + str(old) + ']')
-                memory.remove(old)
+            elif len(memory) == num_frames:  #memory is full, use algorithm
+                print('[removing ' + str(memory[tracker]) + ']')
+                memory[tracker] = x
+                #for i, item in enumerate(memory):
+                 #   if item == memory[tracker]:
+                  #      memory[tracker] = x
+
+                show_rec(memory)
 
         else:  #no page fault
-            print('value found in memory(no fault)\t\t\t', end=' \n')
+            print('\nvalue found in memory(no fault)\t\t\t', end=' \n')
             show_rec(memory)
 
     return 0
@@ -168,7 +174,7 @@ def main():
     parser.add_argument('-alg',
                         type=int,
                         dest='algorithm',
-                        default=1,
+                        default=2,
                         required=False,
                         help='Algorithm to test: [1,2,3] - FIFO, LRU, OPT')
     args = parser.parse_args()

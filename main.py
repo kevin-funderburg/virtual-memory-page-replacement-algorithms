@@ -124,13 +124,14 @@ def OPT(num_frames: int):
     print("Reference String:",*REF_STRING)
 
     memory = []
+    #distance = [] #corresponds to memory, each value represents the time until its memory value will be used
 
-    fifo_q = queue.Queue(num_frames)
     page_fault_count = 0
 
     for x in REF_STRING:
 
         print('\n' + str(x) + ' on deck')
+        print('Memory:', *memory)
 
         if x not in memory:  # page fault
             page_fault_count += 1
@@ -143,9 +144,26 @@ def OPT(num_frames: int):
                 print('Page faults:', page_fault_count)
 
             elif len(memory) == num_frames: # memory is full use algorithm
-                print('[removing' + ']', end='')
-                #memory.remove(old)
-                print('\nMemory:',*memory)
+                largest = 0
+                for mem_item in memory:
+                    for ref_item in REF_STRING:
+                        if mem_item == ref_item:
+                            if len(REF_STRING) - REF_STRING[::-1].index(ref_item) - 1 > largest:
+                                largest = len(REF_STRING) - REF_STRING[::-1].index(ref_item) - 1
+
+                for item in memory:
+                    if item == REF_STRING[largest]:
+                        removed = item
+                        memory[memory.index(item)] = x
+
+                print('ref string:', REF_STRING[largest], 'at index: ', largest)
+
+                #look at values in memory
+                #find which value in memory has the longest time until its use in
+                #reference string
+                print('[removing ' + str(removed) + ']')
+
+                print('Memory:',*memory)
 
         else:  # not page fault
             print('value found in memory(no fault)\t\t\t', end=' \n')
@@ -206,7 +224,7 @@ def main():
     parser.add_argument('--frames',
                         type=int,
                         dest='frames',
-                        default=7,
+                        default=4,
                         required=False,
                         help='number of physical-memory page frames available')
     parser.add_argument('-alg',

@@ -127,13 +127,15 @@ def OPT(num_frames: int):
     #distance = [] #corresponds to memory, each value represents the time until its memory value will be used
 
     page_fault_count = 0
+    counter = -1
 
     for x in REF_STRING:
-
+        counter += 1
         print('\n' + str(x) + ' on deck')
         print('Memory:', *memory)
 
         if x not in memory:  # page fault
+            print("Reference String:", *REF_STRING)
             page_fault_count += 1
             print('page fault ->', end=' ')
 
@@ -144,19 +146,21 @@ def OPT(num_frames: int):
                 print('Page faults:', page_fault_count)
 
             elif len(memory) == num_frames: # memory is full use algorithm
-                largest = 0
+                largest_ref_index = 0
+                found = False
+                removed = 0
                 for mem_item in memory:
                     for ref_item in REF_STRING:
                         if mem_item == ref_item:
-                            if len(REF_STRING) - REF_STRING[::-1].index(ref_item) - 1 > largest:
-                                largest = len(REF_STRING) - REF_STRING[::-1].index(ref_item) - 1
+                            if REF_STRING.index(ref_item) > largest_ref_index:
+                                largest_ref_index = REF_STRING.index(ref_item)
 
                 for item in memory:
-                    if item == REF_STRING[largest]:
+                    if item == REF_STRING[largest_ref_index]:
                         removed = item
                         memory[memory.index(item)] = x
 
-                print('ref string:', REF_STRING[largest], 'at index: ', largest)
+                print('ref string:', REF_STRING[largest_ref_index], 'at index: ', largest_ref_index)
 
                 #look at values in memory
                 #find which value in memory has the longest time until its use in
@@ -168,6 +172,8 @@ def OPT(num_frames: int):
         else:  # not page fault
             print('value found in memory(no fault)\t\t\t', end=' \n')
             print('Memory:',*memory)
+            
+        REF_STRING[counter] = 50
 
     print('\n\nTotal page faults: ', page_fault_count)
 
@@ -224,7 +230,7 @@ def main():
     parser.add_argument('--frames',
                         type=int,
                         dest='frames',
-                        default=4,
+                        default=5,
                         required=False,
                         help='number of physical-memory page frames available')
     parser.add_argument('-alg',

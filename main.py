@@ -121,8 +121,9 @@ def OPT(num_frames: int):
 
     print('Optimal page replacement')
     print("reference string length:", len(REF_STRING))
-    print("Reference String:",*REF_STRING)
+    print("Reference String: length["+ str(len(REF_STRING)) +']',*REF_STRING)
 
+    age = []
     memory = []
     #distance = [] #corresponds to memory, each value represents the time until its memory value will be used
 
@@ -135,13 +136,15 @@ def OPT(num_frames: int):
         print('Memory:', *memory)
 
         if x not in memory:  # page fault
-            print("Reference String:", *REF_STRING)
+            print("Reference String: length[" + str(len(REF_STRING)) + ']', *REF_STRING)
             page_fault_count += 1
             print('page fault ->', end=' ')
 
             if len(memory) != num_frames: # memory not full append value
                 print('filling memory')
                 memory.append(x)
+                age.append(0)
+                age = [item + 1 for item in age]
                 print('Memory:', *memory)
                 print('Page faults:', page_fault_count)
 
@@ -151,22 +154,26 @@ def OPT(num_frames: int):
                 removed = 0
                 for mem_item in memory:
                     for ref_item in REF_STRING:
-                        if mem_item == ref_item:
+                        if mem_item == ref_item: #if mem_item is further down ref_string
+                            found = True
                             if REF_STRING.index(ref_item) > largest_ref_index:
                                 largest_ref_index = REF_STRING.index(ref_item)
 
-                for item in memory:
+                for item in memory: #replace item in memory
                     if item == REF_STRING[largest_ref_index]:
                         removed = item
                         memory[memory.index(item)] = x
 
+                print('Age:    ', *age)
+                if found == False: #if the item is no longer in the reference sting, replace oldest one
+                    index = age.index(max(age))
+                    print('[removing ' + str(memory[index]) + ']')
+                    memory[index] = x
+                    age = [item + 1 for item in age]
+                    age[index] = 0
+
                 print('ref string:', REF_STRING[largest_ref_index], 'at index: ', largest_ref_index)
-
-                #look at values in memory
-                #find which value in memory has the longest time until its use in
-                #reference string
                 print('[removing ' + str(removed) + ']')
-
                 print('Memory:',*memory)
 
         else:  # not page fault

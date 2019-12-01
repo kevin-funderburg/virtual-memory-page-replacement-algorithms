@@ -20,6 +20,7 @@ def FIFO(num_frames: int):
     """
     memory = []
 
+    print("First in first out")
     fifo_q = queue.Queue(num_frames)
     page_fault_count = 0
 
@@ -61,6 +62,7 @@ def LRU(num_frames: int):
     """
     Least Recently Used page replacement
     """
+    print('Least recently used page replacement')
     memory = []
     age = []
 
@@ -78,8 +80,8 @@ def LRU(num_frames: int):
         #print('tracker = ', tracker, end=' ')
 
         if x not in memory:  #page fault
-            print('page fault ->', end=' ')
             page_fault_count += 1
+            print('page fault ->', end=' ')
 
             if len(memory) != num_frames: #memory not full append value
                 print('filling memory')
@@ -87,6 +89,7 @@ def LRU(num_frames: int):
                 age.append(0)
                 age = [item + 1 for item in age]
                 print('Memory: ', *memory)
+                print('Page faults:', page_fault_count)
 
             elif len(memory) == num_frames:  #memory is full, use algorithm
                 index = age.index(max(age))
@@ -95,11 +98,14 @@ def LRU(num_frames: int):
                 age = [item + 1 for item in age]
                 age[index] = 0
                 print('Memory: ',*memory)
+                print('Page faults:', page_fault_count)
 
         else:  #no page fault
-
-            print('\nvalue found in memory(no fault)\t\t\t', end=' \n')
+            print('value found in memory(no fault)\t\t\t', end=' \n')
             age = [item + 1 for item in age]
+            index = memory.index(x)
+            age[index] = 0
+            print('Age:    ', *age)
             print('Memory: ', *memory)
 
     print('\n\nTotal page faults: ', page_fault_count)
@@ -111,8 +117,11 @@ def OPT(num_frames: int):
     """
     Optimal page replacement
     """
-    frame_age = []
+
+    print('Optimal page replacement')
     memory = []
+    print("reference string length:", len(REF_STRING))
+    print("Reference String:",*REF_STRING)
 
     fifo_q = queue.Queue(num_frames)
     page_fault_count = 0
@@ -122,20 +131,26 @@ def OPT(num_frames: int):
         print('\n' + str(x) + ' on deck')
 
         if x not in memory:  # page fault
-            print('page fault\n', end='')
             page_fault_count += 1
-            fifo_q.put(x)
-            memory.append(x)
-            show_rec(memory)
+            print('page fault ->', end=' ')
 
-            if fifo_q.full():
-                old = fifo_q.get()
-                print('\t[removing ' + str(old) + ']')
-                memory.remove(old)
+            if len(memory) != num_frames:
+                print('filling memory')
+                memory.append(x)
+                print('Memory:', *memory)
+                print('Page faults:', page_fault_count)
+
+            elif len(memory) == num_frames:
+                print('[removing' + ']', end='')
+                #memory.remove(old)
+                print('\nMemory:',*memory)
 
         else:  # not page fault
             print('value found in memory(no fault)\t\t\t', end=' \n')
-            show_rec(memory)
+            print('Memory:',*memory)
+
+    print('\n\nTotal page faults: ', page_fault_count)
+
     return 0
 
 
@@ -189,13 +204,13 @@ def main():
     parser.add_argument('--frames',
                         type=int,
                         dest='frames',
-                        default=10,
+                        default=7,
                         required=False,
                         help='number of physical-memory page frames available')
     parser.add_argument('-alg',
                         type=int,
                         dest='algorithm',
-                        default=2,
+                        default=3,
                         required=False,
                         help='Algorithm to test: [1,2,3] - FIFO, LRU, OPT')
     args = parser.parse_args()

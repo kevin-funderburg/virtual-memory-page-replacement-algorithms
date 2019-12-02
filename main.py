@@ -238,13 +238,13 @@ def main():
     parser.add_argument('--frames',
                         type=int,
                         dest='frames',
-                        default=20,
+                        default=5,
                         required=False,
                         help='number of physical-memory page frames available')
     parser.add_argument('-alg',
                         type=int,
                         dest='algorithm',
-                        default=2,
+                        default=1,
                         required=False,
                         help='Algorithm to test: [1,2,3] - FIFO, LRU, OPT')
     args = parser.parse_args()

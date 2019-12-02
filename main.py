@@ -162,18 +162,19 @@ def OPT(num_frames: int):
                 for item in memory: #replace item in memory
                     if item == REF_STRING[largest_ref_index]:
                         removed = item
+                        print('ref string:', REF_STRING[largest_ref_index], 'at index: ', largest_ref_index)
+                        print('[removing ' + str(removed) + ']')
                         memory[memory.index(item)] = x
 
-                print('Age:    ', *age)
                 if found == False: #if the item is no longer in the reference sting, replace oldest one
+                    print("item no longer in reference string, replace oldest item")
+                    print('Age:', *age)
                     index = age.index(max(age))
                     print('[removing ' + str(memory[index]) + ']')
                     memory[index] = x
                     age = [item + 1 for item in age]
                     age[index] = 0
 
-                print('ref string:', REF_STRING[largest_ref_index], 'at index: ', largest_ref_index)
-                print('[removing ' + str(removed) + ']')
                 print('Memory:',*memory)
 
         else:  # not page fault
@@ -237,13 +238,13 @@ def main():
     parser.add_argument('--frames',
                         type=int,
                         dest='frames',
-                        default=5,
+                        default=20,
                         required=False,
                         help='number of physical-memory page frames available')
     parser.add_argument('-alg',
                         type=int,
                         dest='algorithm',
-                        default=3,
+                        default=2,
                         required=False,
                         help='Algorithm to test: [1,2,3] - FIFO, LRU, OPT')
     args = parser.parse_args()

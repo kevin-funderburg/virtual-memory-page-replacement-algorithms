@@ -9,8 +9,6 @@ import queue
 #import logging
 import random
 import argparse
-#import matplotlib.pyplot as plt
-import numpy as np
 
 REF_STRING = None
 
@@ -181,7 +179,7 @@ def OPT(num_frames: int):
         else:  # not page fault
             print('value found in memory(no fault)\t\t\t', end=' \n')
             print('Memory:',*memory)
-            
+
         REF_STRING[counter] = 50
 
     print('\n\nTotal page faults: ', page_fault_count)
